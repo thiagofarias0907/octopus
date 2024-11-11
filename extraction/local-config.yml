@@ -1,0 +1,8 @@
+base_url: "https://octopusenergy.it"
+first_page: "/le-nostre-tariffe"
+
+postgresql:
+  host: localhost
+  username:
+  password:
+  port:
