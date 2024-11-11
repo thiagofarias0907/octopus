@@ -11,10 +11,17 @@ from extraction.model import PlanOffer
 from extraction.exceptions import InvalidContentException, DownloadException, ParsingFailureException
 
 
-class OctopusParser:
+class OctopusPlanParser:
+    """"
+
+    It seems that those class naming is server controlled, so it may be risky to use them as they can change frequently
+    and this code will be broken in the future. On the other side, there's a json format data in the script tag,
+    but some info are not the same as the rendered to the user, so I avoided using the json data.
+    To access the structured data, one could simply use: self.__soup.select("script#__NEXT_DATA__")[0]
+    """
 
     def __init__(self, html_content: str, url: str):
-        if (html_content is None) or (("Le nostre tariffe luce" not in html_content) and ("Seleziona la tariffa" not in html_content)):
+        if (html_content is None) or ("Le nostre tariffe luce" not in html_content):
             raise InvalidContentException(content=html_content, url=url)
 
         self.__soup = BeautifulSoup(html_content, 'html.parser')
@@ -58,16 +65,11 @@ class OctopusParser:
         return next_url
 
     def _download_files(self):
-        # for offer in self.get_offers():
-        #     self.__download(offer)
-
         with ThreadPoolExecutor() as executor:
             executor.map(self._download, self.get_offers())
 
     @staticmethod
     def _download(offer: PlanOffer):
-        # path, headers = urlretrieve(offer.file_url, offer.create_file_path_name())
-        # return path
         try:
             response = requests.get(offer.file_url)
             file_name = offer.create_file_path_name()

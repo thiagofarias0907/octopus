@@ -163,3 +163,8 @@ cython_debug/
 
 # download data
 data/*.pdf
+
+# secrets
+extraction/*.yml
+extraction/local-config.yml
+app/.streamlit
