@@ -4,6 +4,9 @@ import datetime as dt
 
 
 class PlanOffer(BaseModel):
+    """
+    Model class to help handling the web scraping processes and functions
+    """
     name: str = ""
     commercial_cost: float = 0.0
     file_url: str = ""

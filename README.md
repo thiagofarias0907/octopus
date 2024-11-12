@@ -15,13 +15,14 @@ What it does:
 
 ## How to run and useful commands
 - Create a venv and activate it. Python 3.12 was used in this project.
-- To install the dependencies, run `pip freeze -r requirements.txt`
-- You can run the main webscraping script with `python extraction/main.py`
+- To install the dependencies, run `pip install -r requirements.txt`
+- Run the main webscraping script with `python main.py`
 - You can run the unit tests by `python -m unittest`
 - Start the streamlit app with `streamlit run app/dashboard.py` or `python -m streamlit run app/dashboard.py`
 
-## Config File
-Create a yaml file named `local-config.yml` in the `extraction` folder, eg: `extraction/local-config.yml`. The file must contain
+## Config Files
+### Extraction
+Create a yaml file named `local-config.yml` in the project folder (same level as `main.py`), eg: `octopus/local-config.yml`. The file must contain
 ```
 base_url: "https://octopusenergy.it"
 first_page: "/le-nostre-tariffe"
@@ -33,9 +34,25 @@ postgresql:
   port: 5432
 ```
 
+### Streamlit
+Create a config.toml file in the `.streamlit` directory with this content:
+```
+[connections.postgresql]
+type="sql"
+dialect="postgresql"
+username="insert_username_value_here"
+password="insert_password_value_here"
+host="insert_host_value_here"
+port=5432
+database="insert_database_value_here"
+```
+
+
 ## DDL
 
-### Create main table
+### Create the main table
+I could have used a normalized set of tables using another for the `user type` and another for the `rate type`, but it doesn't seem to be efficient 
+considering the coding changes and complexity for a short string/varchar column value  
 ```
 -- DROP TABLE public.plan_offer;
 

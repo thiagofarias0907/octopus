@@ -9,8 +9,10 @@ from extraction.exceptions import InvalidContentException, ParsingFailureExcepti
 
 class DetailedOfferParser:
     """
+    Class that process the html of the second page. It has the html content as an attribute and returns all the offers
+    found in the given html.
 
-    It seems that those class naming is server controlled, so it may be risky to use them as they can change frequently
+    Obs: It seems that those dom class naming is server controlled, so it may be risky to use them as they can change frequently
     and this code will be broken in the future. On the other side, there's a json format data in the script tag,
     but some info are not the same as the rendered to the user, so I avoided using the json data.
     To access the structured data, one could simply use: self.__soup.select("script#__NEXT_DATA__")[0]
@@ -25,6 +27,10 @@ class DetailedOfferParser:
         self.__url = url
 
     def get_offers(self) -> List[PlanOffer]:
+        """
+        Parse all the plan offer details and return them
+        :return: A list of PlanOffer objects
+        """
         if self.__plan_offers is not None:
             return self.__plan_offers
 

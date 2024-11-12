@@ -29,7 +29,6 @@ headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "accept-language": "it;q=0.8,en-US;q=0.5,en;q=0.3",
-    # "accept-encoding": "gzip, deflate, br, zstd",
     "connection": "keep-alive"
 }
 
@@ -39,6 +38,7 @@ current_time = dt.datetime.now()
 
 
 def get_page(url: str):
+    """GET Request"""
     response_get = requests.get(url=url, headers=headers)
     html = response_get.text
     if response_get.status_code != 200:
@@ -47,14 +47,16 @@ def get_page(url: str):
 
 
 def clear_data_files():
-    if not os.path.exists('../data'):
-        os.mkdir("../data")
+    """Clears the data folder where the files will be downloaded"""
+    if not os.path.exists('data'):
+        os.mkdir("data")
 
     for file_name in glob.glob("../data/*.pdf"):
         os.remove(file_name)
 
 
 def create_entity(offer: PlanOffer) -> PlanOfferEntity:
+    """Simple function to map between objects to be saved in database"""
     return PlanOfferEntity(
         extraction_datetime=current_time,
         name=offer.name,
@@ -75,7 +77,8 @@ if __name__ == '__main__':
     parser = OctopusPlanParser(page_content, config['first_page'])
 
     logger.info("Downloading files")
-    parser._download_files()
+    if parser.should_download_all_pdfs(parser.get_offers()):
+        parser.download_files()
 
     next_page = parser.get_next_page_button_url()
 
@@ -86,7 +89,7 @@ if __name__ == '__main__':
     logger.info("Parsing second page")
     parser = None
     try:
-        plan_offers_element = WebDriverWait(driver, 10).until(
+        plan_offers_element = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".sc-56k6h2-0.jrHhzT"))
         )
         parser = DetailedOfferParser(driver.page_source, next_page)

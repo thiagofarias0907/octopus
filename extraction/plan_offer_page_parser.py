@@ -12,7 +12,9 @@ from extraction.exceptions import InvalidContentException, DownloadException, Pa
 
 
 class OctopusPlanParser:
-    """"
+    """
+    First page webscraping code. It expects the html content and can return all the plan offers, get the next page url
+    and download all files. The <$100 rule control must be done by the main script.
 
     It seems that those class naming is server controlled, so it may be risky to use them as they can change frequently
     and this code will be broken in the future. On the other side, there's a json format data in the script tag,
@@ -29,6 +31,10 @@ class OctopusPlanParser:
         self.__url = url
 
     def get_offers(self) -> List[PlanOffer]:
+        """
+        Extract the data for each plan offer and return them
+        :return: List[PlanOffer]
+        """
         if self.__plan_offers is not None:
             return self.__plan_offers
 
@@ -56,6 +62,10 @@ class OctopusPlanParser:
         return plan_offers
 
     def get_next_page_button_url(self) -> str:
+        """
+        Extract the href value from the call-to-action button
+        :return: url
+        """
         next_url = None
         try:
             pseudo_button = self.__soup.select("a.sc-1bcn1h0-1.kOkVgW")[0]
@@ -64,12 +74,17 @@ class OctopusPlanParser:
             raise ParsingFailureException("a.sc-1bcn1h0-1.kOkVgW", self.__url)
         return next_url
 
-    def _download_files(self):
+    def download_files(self):
+        """
+        Download all the CTE pdf files from the page's plan offers
+        :return: None
+        """
         with ThreadPoolExecutor() as executor:
             executor.map(self._download, self.get_offers())
 
     @staticmethod
     def _download(offer: PlanOffer):
+        """Download a single file for the given PlanOffer's file url"""
         try:
             response = requests.get(offer.file_url)
             file_name = offer.create_file_path_name()
@@ -87,6 +102,10 @@ class OctopusPlanParser:
 
     @staticmethod
     def should_download_all_pdfs(plan_offers) -> bool:
+        """
+        It returns True if there is at least one plan offer below $100; False, if all are equal or greater than $100.
+        Obs.: I understood that I should download all pdf if there was at least one plan offer lower than $100.
+        I wasn't sure if I should download only the pdf for those with offers below 100."""
         for offer in plan_offers:
             if offer.commercial_cost < 100:
                 return True

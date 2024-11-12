@@ -1,16 +1,4 @@
-"""
-CREATE TABLE public.plan_offer (
-	extraction_datetime timestamp NOT NULL,
-	name varchar NOT NULL,
-	raw_material_cost varchar NOT NULL,
-	commercial_cost float4 NOT NULL,
-	file_name_path varchar NOT NULL,
-	time_rate_type varchar NOT NULL,
-	user_type varchar NOT NULL
-);
-CREATE INDEX plan_offer_extraction_datetime_idx ON public.plan_offer (extraction_datetime);
 
-"""
 from typing import List
 
 from sqlalchemy import create_engine
@@ -18,8 +6,25 @@ from sqlalchemy.orm import Session
 
 from extraction import PlanOfferEntity
 
-class Database:
 
+class Database:
+    """
+        Database class needed to insert a list of PlanOfferEntity into the database. It controls internally
+        a PostgreSQL connection and sessions, the config dict must be passed as parameter on the object creation.
+    """
+    """
+    CREATE TABLE public.plan_offer (
+        extraction_datetime timestamp NOT NULL,
+        name varchar NOT NULL,
+        raw_material_cost varchar NOT NULL,
+        commercial_cost float4 NOT NULL,
+        file_name_path varchar NOT NULL,
+        time_rate_type varchar NOT NULL,
+        user_type varchar NOT NULL
+    );
+    CREATE INDEX plan_offer_extraction_datetime_idx ON public.plan_offer (extraction_datetime);
+
+    """
     def __init__(self, config):
         self.__engine = None
         self.__config = config['postgresql']

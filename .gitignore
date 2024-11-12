@@ -165,5 +165,5 @@ cython_debug/
 data/*.pdf
 
 # secrets
-extraction/*.yml
+*config.yml
 .streamlit/secrets.toml

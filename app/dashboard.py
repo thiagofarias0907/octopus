@@ -24,7 +24,7 @@ if date_input is not None:
     """, ttl="5m")
     st.dataframe(data=df)
 
-# the next way the date filter is being applied after, but including a where clause in the SQL query would be suggested
+# another way of using a date filter is applied it after, but including a where clause in the SQL query would be better
 # especially for large datasets, otherwise the index created on the date column won't be useful
 # filtered_df = df[df['Data'] == date_input]
 # st.dataframe(data=filtered_df)

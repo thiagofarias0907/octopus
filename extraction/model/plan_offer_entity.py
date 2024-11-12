@@ -5,6 +5,10 @@ class Base(DeclarativeBase):
     pass
 
 class PlanOfferEntity(Base):
+    """
+    Model class representing the database Entity in PostgreSQL using SQLAlchemy ORM mapping. I cloud have merged both
+    models, using only one, but I wanted to avoid issues with the not null fields, which are different between both.
+    """
     __tablename__ = "plan_offer"
 
     extraction_datetime: Mapped[dt.datetime] = mapped_column(primary_key=True)
