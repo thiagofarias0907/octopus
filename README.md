@@ -35,7 +35,7 @@ postgresql:
 ```
 
 ### Streamlit
-Create a config.toml file in the `.streamlit` directory with this content:
+Create a `secrets.toml` file in the `.streamlit` directory with this content:
 ```
 [connections.postgresql]
 type="sql"
