@@ -8,10 +8,12 @@ from extraction.exceptions import InvalidContentException, ParsingFailureExcepti
 
 page_one_content = ""
 page_two_content = ""
-with open('./pages/page1.htm', 'r', encoding='utf-8') as file:
+
+test_dir = os.path.dirname(__file__)
+with open(os.path.join(test_dir,'pages/page1.htm'), 'r', encoding='utf-8') as file:
     page_one_content = file.read()
 
-with open('./pages/page2.htm', 'r', encoding='utf-8') as file:
+with open(os.path.join(test_dir,'pages/page2.htm'), 'r', encoding='utf-8') as file:
     page_two_content = file.read()
 
 
