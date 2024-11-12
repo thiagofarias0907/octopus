@@ -166,5 +166,4 @@ data/*.pdf
 
 # secrets
 extraction/*.yml
-extraction/local-config.yml
-.streamlit
+.streamlit/secrets.toml
